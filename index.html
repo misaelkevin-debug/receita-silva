@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confeitaria Pro</title>
+
+    <!-- CSS externo (o conteúdo do seu <style> foi movido para style.css) -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Font Awesome para os ícones (bolo, busca, coração, etc.) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+</head>
+<body>
+    <!-- ===========================
+         Cabeçalho fixo com navegação
+         =========================== -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <i class="fas fa-birthday-cake"></i>
+                Receitas Silva
+            </div>
+
+            <!-- Menu desktop -->
+            <ul class="nav-links" id="navLinks">
+                <!-- data-section controla qual seção mostrar -->
+                <li><a href="#" data-section="home" class="active">Início</a></li>
+                <li><a href="#" data-section="recipes">Receitas</a></li>
+                <li><a href="#" data-section="favorites">Favoritos</a></li>
+                <li><a href="#" data-section="add-recipe">Adicionar</a></li>
+                <li><a href="#" data-section="tips">Dicas de Ouro</a></li>
+            </ul>
+
+            <!-- Botão menu mobile -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ===========================
+         Conteúdo principal
+         =========================== -->
+    <main class="container">
+        <!-- ====== HOME ====== -->
+        <section id="home" class="section">
+            <div class="hero">
+                <h1>Receitas Simples & Deliciosas</h1>
+                <p>Aprenda a cozinhar de forma prática e saborosa</p>
+            </div>
+
+            <!-- Busca + filtros (home) -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar receitas, ingredientes ou tags..." />
+                </div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">TODAS</button>
+                    <button class="filter-btn" data-filter="SALGADOS E LANCHES">SALGADOS E LANCHES</button>
+                    <button class="filter-btn" data-filter="MASSAS SALGADAS">MASSAS SALGADAS</button>
+                    <button class="filter-btn" data-filter="FRITOS">FRITOS</button>
+                    <button class="filter-btn" data-filter="ASSADOS">ASSADOS</button>
+                    <button class="filter-btn" data-filter="BOLOS">BOLOS</button>
+                    <button class="filter-btn" data-filter="MASSAS DOCES">MASSAS DOCES</button>
+                    <button class="filter-btn" data-filter="SOBREMESA">SOBREMESA</button>
+                </div>
+            </div>
+
+            <!-- Grid inicial de receitas -->
+            <div class="recipes-grid" id="recipesGrid"></div>
+        </section>
+
+        <!-- ====== RECEITAS ====== -->
+        <section id="recipes" class="section hidden">
+            <h2>Todas as Receitas</h2>
+
+            <!-- Busca + filtros (página de receitas) -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="searchInputRecipes" placeholder="Buscar receitas, ingredientes ou tags..." />
+                </div>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">TODAS</button>
+                    <button class="filter-btn" data-filter="SALGADOS E LANCHES">SALGADOS E LANCHES</button>
+                    <button class="filter-btn" data-filter="MASSAS SALGADAS">MASSAS SALGADAS</button>
+                    <button class="filter-btn" data-filter="FRITOS">FRITOS</button>
+                    <button class="filter-btn" data-filter="ASSADOS">ASSADOS</button>
+                    <button class="filter-btn" data-filter="BOLOS">BOLOS</button>
+                    <button class="filter-btn" data-filter="MASSAS DOCES">MASSAS DOCES</button>
+                    <button class="filter-btn" data-filter="SOBREMESA">SOBREMESA</button>
+                </div>
+            </div>
+
+            <!-- Grid de receitas na página "Receitas" -->
+            <div class="recipes-grid" id="recipesGridPage"></div>
+        </section>
+
+        <!-- ====== FAVORITOS ====== -->
+        <section id="favorites" class="section hidden">
+            <h2>Suas Receitas Favoritas</h2>
+            <div class="recipes-grid" id="favoritesGrid"></div>
+        </section>
+
+        <!-- ====== ADICIONAR RECEITA ====== -->
+        <section id="add-recipe" class="section hidden">
+            <h2>Adicionar Nova Receita</h2>
+
+            <!-- Formulário que cria uma nova receita e salva no localStorage -->
+            <form class="add-recipe-form" id="addRecipeForm">
+                <div class="form-group">
+                    <label for="recipeName">Nome da Receita</label>
+                    <input type="text" id="recipeName" required />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="recipeTime">Tempo (minutos)</label>
+                        <input type="number" id="recipeTime" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeServings">Porções</label>
+                        <input type="number" id="recipeServings" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeLevel">Tipo de receita</label>
+                        <select id="recipeLevel" required>
+                            <option value="SALGADOS E LANCHES">SALGADOS E LANCHES</option>
+                            <option value="MASSAS SALGADAS">MASSAS SALGADAS</option>
+                            <option value="FRITOS">FRITOS</option>
+                            <option value="ASSADOS">ASSADOS</option>
+                            <option value="BOLOS">BOLOS</option>
+                            <option value="MASSAS DOCES">MASSAS DOCES</option>
+                            <option value="SOBREMESA">SOBREMESA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeTags">Tags (separadas por vírgula)</label>
+                    <input type="text" id="recipeTags" placeholder="doce, festa, chocolate" />
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeIngredients">Ingredientes (um por linha)</label>
+                    <textarea id="recipeIngredients" required placeholder="200g farinha de trigo
+3 ovos
+250ml leite"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeInstructions">Modo de Preparo (um passo por linha)</label>
+                    <textarea id="recipeInstructions" required placeholder="Misture todos os ingredientes secos
+Adicione os ovos um a um
+Incorpore o leite aos poucos"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeTips">Dicas (opcional)</label>
+                    <textarea id="recipeTips" placeholder="Dicas importantes para o sucesso da receita"></textarea>
+                </div>
+
+                <button type="submit" class="btn">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Receita
+                </button>
+            </form>
+        </section>
+
+        <!-- ====== DICAS ====== -->
+        <section id="tips" class="section hidden">
+            <div class="tips-section-main">
+                <h2>Dicas de Ouro de receitas</h2>
+                <p>Conhecimentos essenciais para ter sucesso na confeitaria, desde técnicas básicas até segredos profissionais.</p>
+                
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h3><i class="fas fa-thermometer-half"></i> Temperatura dos Ingredientes</h3>
+                        <p>Sempre use ingredientes na temperatura indicada na receita. Carnes, massas, legumes e bolos podem ter resultados diferentes se usados frios ou em temperatura ambiente.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-balance-scale"></i> Medidas Precisas</h3>
+                        <p>Medidas corretas garantem o sucesso de qualquer receita. Sempre que possível, use xícaras, colheres padronizadas ou balança para evitar erros.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-fire"></i> Pré-aquecimento do Forno</h3>
+                        <p>Aqueça o forno ou a panela pelo tempo necessário antes de cozinhar. Essa etapa é essencial para assados, frituras e grelhados ficarem no ponto certo.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-egg"></i> Ponto dos Ingredientes</h3>
+                        <p>Respeite os pontos de cozimento: massas al dente, carnes no ponto desejado, claras em neve firmes. Isso garante sabor e textura adequados.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-cookie-bite"></i> Mistura Delicada</h3>
+                        <p>Mexa massas e recheios com cuidado quando necessário. Movimentos suaves ajudam a manter a textura correta, evitando que o prato perca leveza.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-clock"></i> Tempo de Descanso</h3>
+                        <p>Respeite os tempos de descanso das receitas, como carnes após assar, massas para crescer ou sobremesas que precisam gelar. Isso faz diferença no resultado final.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===========================
+         Modal de detalhes da receita
+         =========================== -->
+    <div id="recipeModal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeModal()" aria-label="Fechar modal">&times;</button>
+                <h2 id="modalRecipeTitle"></h2>
+                <div class="recipe-meta" id="modalRecipeMeta"></div>
+            </div>
+
+            <div class="modal-body">
+                <img id="modalRecipeImage" class="recipe-detail-image" alt="" />
+
+                <!-- Ingredientes com calculadora de porções -->
+                <div class="ingredients-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-list-ul"></i>
+                        Ingredientes
+                    </h3>
+                    <div class="calculator-controls">
+                        <label for="portionCalculator">Calcular para:</label>
+                        <input type="number" id="portionCalculator" min="1" value="1" />
+                        <span>porções</span>
+                        <button class="calc-btn" onclick="calculateIngredients()">Calcular</button>
+                        <button class="calc-btn btn-secondary" onclick="resetCalculator()">Reset</button>
+                    </div>
+                    <ul class="ingredients-list" id="modalIngredientsList"></ul>
+                </div>
+
+                <!-- Modo de preparo -->
+                <div class="instructions-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        Modo de Preparo
+                    </h3>
+                    <ol class="instructions-list" id="modalInstructionsList"></ol>
+                </div>
+
+                <!-- Dicas extras (se houver) -->
+                <div class="tips-section" id="modalTipsSection">
+                    <h3 class="section-title">
+                        <i class="fas fa-lightbulb"></i>
+                        Dicas Importantes
+                    </h3>
+                    <ul class="tips-list" id="modalTipsList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de feedback (sucesso/erro) -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- ===========================
+         JavaScript da aplicação
+         (mantido aqui como no seu arquivo original)
+         =========================== -->
+    <script>
+        /* ===========================
+           Base de receitas (inicial)
+           =========================== */
+        let recipes = [
+            {
+                id: 1,
+                name: "BOLO QUENTE DE CHOCOLATE",
+                time: 60,
+                servings: 8,
+                level: "BOLOS",
+                tags: ["doce", "festa", "quente", "chocolate"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/688386f77a292517905c4976/fotos/bc4d5fbb-a74d-4cc6-95c5-697b81314757-lg.webp",
+                imageAlt: "Bolo quente de chocolate",
+                ingredients: [
+                    "3 ovos",
+                    "1 xicara de açúcar",
+                    "3/4 xicara de óleo",
+                    "1 colher de chá de essência de baunilha",
+                    "1 xícara de água quente",
+                    "1-1/2 xícaras de farinha de trigo",
+                    "3/4 xícara de cacau em pó 50%",
+                    "1 colher de sopa de fermento em pó",
+                    "1 colher de chá de bicarbonato de sódio",
+                    "2 colheres de sopa de manteiga",
+                    "1 xícara de açúcar",
+                    "1 xícara de cacau em pó 50%",
+                    "2 xícaras de leite",
+                    "200 gramas de creme de leite",
+                    "200 gramas de chocolate meio amargo",
+                    " Flocos de chocolate a gosto"
+                    
+                ],
+                instructions: [
+                    "Em um recipiente, adicione os ovos, o açúcar, o óleo, a essência de baunilha, a água quente e misture tudo muito bem.",
+                    "Em seguida, acrescente a farinha de trigo, o cacau em pó 50%, o fermento em pó, o bicarbonato de sódio e misture novamente.",
+                    "Transfira para uma forma untada e enfarinhada.",
+                    "Depois, leve ao forno preaquecido a 180 graus por 35 minutos.",
+                    "Para fazer a calda, em uma panela, adicione a manteiga, o açúcar, o cacau em pó 50%, o leite e misture bem até ferver.",
+                    "Agora, faça alguns furos no bolo e despeje a calda que fizemos anteriormente.",
+                    "Para fazer a cobertura, em um recipiente, adicione o creme de leite, o chocolate meio amargo derretido e misture bem.",
+                    "Despeje sobre o bolo e espalhe.",
+                    "Depois, finalize com os flocos de chocolate."
+                    
+                ],
+                tips: [
+                    "Teste com palito se está assado",
+                    "Cenouras bem doces dispensam açúcar extra",
+                    "Deixe esfriar antes de desenformar"
+                ]
+            },
+            {
+                id: 2,
+                name: "BOLO ROMEU E JULIETA ",
+                time: 60,
+                servings: 8,
+                level: "BOLOS",
+                tags: ["bolo", "receita de bolo", "café da tarde", "receita simples"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/687a332f7a2925179056445e/fotos/b6c8db9d-33f5-4b03-a304-231d92be2ce2-lg.webp",
+                imageAlt: "bolo romeu e julieta com pedaços de goiaba e queijo",
+                ingredients: [
+                    "3 unidades de ovos",
+                    "1 xícara de leite",
+                    "1/2 xícara de óleo",
+                    "1 xícara de açúcar",
+                    "1 xícara de fubá",
+                    "1 xícara de farinha de trigo",
+                    "1 colher de sopa de fermento em pó",
+                    " Queijo coalho a gosto",
+                    " Goiabada a gosto",
+                    " Leite condensado a gosto"
+                    
+                ],
+                instructions: [
+                    "No liquidificador, adicione os ovos, o leite, o óleo, o açúcar, o fubá, a farinha de trigo e bata tudo muito bem.",
+                    "Em seguida, acrescente o fermento em pó e bata levemente.",
+                    "Transfira para uma forma untada e enfarinhada.",
+                    "Depois, adicione o queijo coalho e a goiabada.",
+                    "Finalize com o leite condensado e leve ao forno preaquecido a 180 graus por 40 minutos."
+                    
+                    
+                ],
+                tips: [
+                    "Fogo baixo evita queimar",
+                    "Mãos untadas facilitam modelar",
+                    "Pode fazer no micro-ondas em intervalos"
+                ]
+            },
+            {
+                id: 3,
+                name: "BOLO DE MANDIOCA",
+                time: 60,
+                servings: 8,
+                level: "BOLOS",
+                tags: ["bolo", "mandioca", "receita simples"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/66a38868d24e6578ef39e6d1/fotos/59680a77-542c-42de-b5d7-ebbbc33dfd17-lg.webp",
+                imageAlt: "Bolo de mandioca dourado em forma retangular recém-saído do forno",
+                ingredients: [
+                    
+                    "800 gramas de mandioca",
+                    "2 xícaras de açúcar",
+                    "4 unidades de ovo",
+                    "1 xícara de leite",
+                    "200 mililitros de leite de coco",
+                    "4 colheres de sopa de manteiga",
+                    "1 xícara de muçarela ralada",
+                    "100 gramas de coco",
+                    "1 colher de sopa de fermento em pó",
+                    " Manteiga a gosto",
+                    " Açúcar a gosto"
+                    
+                ],
+                instructions: [
+                    "Em um recipiente, adicione o açúcar, os ovos, o leite, o leite de coco e misture bem.",
+                    "Em seguida, acrescente a manteiga e misture novamente",
+                    "Depois, adicione a mandioca ralada, a muçarela ralada, o coco ralado e misture.",
+                    "Finalize com o fermento em pó e misture levemente",
+                    "Transfira a massa para uma forma untada com a manteiga e o açúcar.",
+                    "Depois, leve ao forno preaquecido a 180 graus por 40 minutos."
+                ],
+                tips: [
+                    "Creme muito quente pode talhar",
+                    "Chocolate de qualidade faz diferença",
+                    "Ganache morna é ideal para cobertura"
+                ]
+            },
+            {
+                id: 4,
+                name: "BOLO DE CHOCOLATE",
+                time: 230,
+                servings: 8,
+                level: "BOLOS",
+                tags: ["bolo de chocolate", "receita simples", "receita doce", "granulado"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/68499a674311f4e513e5e3e6/fotos/fe536aa4-1bcb-4274-98a2-b63561ec3778-xl.webp",
+                imageAlt: "bolo de chocolate com granulado gelado",
+                ingredients: [
+                    "3 unidades de ovo",
+                    "3/4 xícara de óleo",
+                    "1,50 xícaras de açúcar",
+                    "1 xícara de cacau em pó 50%",
+                    "1 xícara de água quente",
+                    "2 xícaras de farinha de trigo",
+                    "1 colher de sopa de fermento em pó",
+                    "300 mililitros de leite",
+                    "1 colher de sopa de cacau em pó 50%",
+                    "1 colher de sopa de manteiga",
+                    "395 gramas de leite condensado",
+                    "200 gramas de creme de leite",
+                    "3 colheres de sopa de cacau em pó 50%",
+                    "120 gramas de chocolate meio amargo",
+                    "Granulado a gosto"
+                    
+                    
+                ],
+                instructions: [
+                    "Em um recipiente, adicione os ovos, o óleo, o açúcar, o cacau em pó, a água quente e misture tudo muito bem.",
+                    "Em seguida, acrescente a farinha de trigo, uma pitada de sal e misture novamente.",
+                    "Depois, adicione o fermento em pó e misture levemente.",
+                    "Transfira para uma forma untada e enfarinhada e leve ao forno preaquecido a 180 graus por 35 minutos.",
+                    "Para fazer a calda, em um recipiente, adicione o leite, o cacau em pó e misture bem.",
+                    "Faça alguns furos no bolo e despeje a calda que fizemos anteriormente.",
+                    "Depois, leve para a geladeira por 1 hora.",
+                    "Para a cobertura, em uma panela, adicione a manteiga, o leite condensado, o creme de leite, o cacau em pó e misture bem até começar a ferver.",
+                    "Assim que ferver, acrescente o chocolate meio amargo e continue mexendo até engrossar.",
+                    "Despeje sobre o bolo e espalhe.",
+                    "Leve para a geladeira por 2 horas.",
+                    "Depois, finalize com o granulado."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 5,
+                name: "BOLO DE PAMONHA",
+                time: 240,
+                servings: 6,
+                level: "BOLOS",
+                tags: ["pamonha", "bolo simples", "receita facil", "doce"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/683996134311f4e513d8686c/fotos/edc7424c-5d28-4442-ae44-739e5dc27931-xl.webp",
+                imageAlt: "",
+                ingredients: [
+                    "510 gramas de milho",
+                    "500 mililitros de leite",
+                    "200 gramas de açúcar",
+                    "6 colheres de sopa de amido de milho",
+                    "1 colher de sopa de manteiga",
+                    "Canela em pó a gosto",
+                    
+                ],
+                instructions: [
+                    "No liquidificador, adicione o milho, o leite e bata por 3 minutos aproximadamente.",
+                    "Se preferir deixar sem pedaços de milho, é só bater por mais tempo.",
+                    "Transfira para uma panela, acrescente o açúcar, o amido de milho, a manteiga e misture.",
+                    "Ligue em fogo médio e mexa até engrossar.",
+                    "Assim que levantar fervura, mexa por mais 5 minutos.",
+                    "Depois, transfira para uma forma e leve para a geladeira por 3 horas.",
+                    "Finalize com a canela em pó."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 6,
+                name: "BOLO FORMIGUEIRO",
+                time: 60,
+                servings: 8,
+                level: "BOLOS",
+                tags: ["bolo", "cenoura", "receita doce", "receita facil"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/620a45dad47c3582e996dc63/fotos/a9c3d277-2c1e-4787-bf3f-516bb635efc6-xl.webp",
+                imageAlt: "bolo formigueiro com calda de chocolate",
+                ingredients: [
+                    "3 unidades de ovos",
+                    "1 xícara de óleo",
+                    "1 xícara de açúcar",
+                    "3 unidades de cenouras",
+                    "2 xícaras de farinha de trigo",
+                    "1 xícara de flocos de chocolate",
+                    "1 colher de sopa de fermento em pó",
+                    "395 gramas de leite condensado",
+                    "3 colheres de sopa de cacau em pó",
+                    "1 colher de sopa de manteiga",
+                    "200 mililitros de leite",
+                    "180 gramas de chocolate meio amargo",
+                    "Flocos de chocolate a gosto"
+                    
+                    
+                ],
+                instructions: [
+                    "No liquidificador, adicione os ovos, o óleo, o açúcar, a cenoura picada e bata tudo muito bem.",
+                    "Transfira para um recipiente, adicione a farinha de trigo e misture.",
+                    "Depois, acrescente os flocos de chocolate e misture novamente.",
+                    "Por fim, adicione o fermento em pó e misture levemente.",
+                    "Despeje em uma forma untada e enfarinha e leve ao forno preaquecido a 180 graus por 30 minutos.",
+                    "Em uma panela, adicione o leite condensado, o cacau em pó e misture bem.",
+                    "Em seguida, acrescente o leite e a manteiga. Ligue em fogo médio e mexa até começar a ferver.",
+                    "Depois, adicione o chocolate meio amargo e mexa até engrossar.",
+                    "Despeje sobre o bolo, espalhe bem e finalize com granulado a gosto."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 7,
+                name: "ENROLADINHO DE SALSICHA",
+                time: 60,
+                servings: 6,
+                level: "SALGADOS E LANCHES",
+                tags: ["salgado", "salsicha", "receita facil", "receita rapida"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/688bcef17a2925179060cd59/fotos/6d2a1803-5464-4633-a7ec-951076e81b3f-xl.webp",
+                imageAlt: "enroladinho de salsicha",
+                ingredients: [
+                    "500 gramas de salsicha",
+                    "200 gramas de muçarela fatiada",
+                    "1 xícara de água",
+                    "1/2 xícara de leite",
+                    "1 colher de sopa de manteiga",
+                    "1 colher de chá de sal",
+                    "1,5 xícaras de farinha de trigo",
+                    "2 unidades de ovo",
+                    "Farinha panko a gosto",
+                    "Óleo a gosto"
+                    
+                    
+                ],
+                instructions: [
+                    "Em uma panela com água fervendo, adicione as salsichas e deixe ferventar por 3 minutos.",
+                    "Em seguida, enrole uma fatia de muçarela e depois, corte ao meio.",
+                    "Em uma panela, adiciona a água, o leite, a manteiga, o sal e deixe levantar fervura.",
+                    "Depois, acrescente a farinha de trigo e mexa até virar uma massa.",
+                    "Coloque a massa sobre a mesa e sove até esfriar e ficar bem lisinha.",
+                    "Agora, pegue um pouco da massa, abra bem e coloque a salsicha.",
+                    "Depois, feche e modele.",
+                    "Para empanar, passe nos ovos batidos e na farinha panko ou farinha de rosca.",
+                    "Agora, é só fritar em óleo quente até dourar."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 8,
+                name: "SALGADO DE PRESUNTO E QUEIJO",
+                time: 140,
+                servings: 6,
+                level: "SALGADOS E LANCHES",
+                tags: ["presunto", "queijo", "salgado", "forno"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/67dc1b994574fde4c786bb5a/fotos/5589cbf4-33a0-44dd-bb60-a160895402a6-xl.webp",
+                imageAlt: "salgado de presunto e queijo no forno",
+                ingredients: [
+                    "570 gramas de farinha de trigo",
+                    "60 gramas de açúcar",
+                    "10 gramas de sal",
+                    "10 gramas de fermento biológico seco",
+                    "300 mililitros de leite",
+                    "100 mililitros de óleo",
+                    "10 gramas de manteiga",
+                    "200 gramas de presunto fatiado",
+                    "200 gramas de muçarela fatiada",
+                    "Requeijão a gosto",
+                    "Tomate a gosto",
+                    "Orégano a gosto",
+                    "1 unidade de gema de ovo",
+                    "Gergelim a gosto"
+                    
+                    
+                ],
+                instructions: [
+                    "Em um recipiente, adicione a farinha de trigo, o açúcar, o sal, o fermento biológico seco e misture.",
+                    "Em seguida, acrescente o leite, o óleo e misture novamente.",
+                    "Transfira a massa para uma mesa e sove por 5 minutos",
+                    "Depois, adicione a manteiga e sove a massa por aproximadamente 10 minutos.",
+                    "Coloque em um recipiente, tampe e deixe descansar por 30 minutos.",
+                    "Agora, com o auxílio de um rolo, abra bem a massa em formato de retângulo.",
+                    "Adicione o presunto fatiado, a muçarela fatiada, o requeijão, o tomate e o orégano.",
+                    "Depois, divida a massa e enrole.",
+                    "Transfira para uma forma untada e enfarinhada, cubra com um pano e deixe descansar por 15 minutos.",
+                    "Pincele a gema de ovo por cima e adicione o gergelim.",
+                    "Depois, leve ao forno preaquecido a 200 graus por aproximadamente 20 minutos."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 9,
+                name: "BOLINHA DE QUEIJO",
+                time: 50,
+                servings: 3,
+                level: "SALGADOS E LANCHES",
+                tags: ["bolinha de queijo", "queijo", "", ""],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/64b69281c14c83fcf439df64/fotos/3380424b-b8b9-44ab-9bf9-c6cde9fd1a9e-xl.webp",
+                imageAlt: "bolinha de queijo",
+                ingredients: [
+                    "2 xícaras de água",
+                    "1 colher de chá de sal",
+                    "2 colheres de sopa de óleo",
+                    "2 xícaras de farinha de trigo",
+                    "Muçarela em pedaço a gosto",
+                    "Orégano a gosto",
+                    "1 unidade de ovo",
+                    "Farinha de rosca a gosto",
+                    "Óleo a gosto"
+                    
+                    
+                ],
+                instructions: [
+                    "Em uma panela, adicione a água, o sal, o óleo, misture bem e deixe ferver.",
+                    "Assim que começar a ferver, adicione a farinha de trigo e continue mexendo em fogo baixo até formar uma massa bem lisa.",
+                    "Transfira para uma mesa e sove por aproximadamente 3 minutos.",
+                    "Pegue um pedaço de massa, abra bem e adicione um pedaço de muçarela com orégano. Depois é só fechar bem e modelar em formato de bolinha. Repita esse processo até acabar toda a massa.",
+                    "Para empanar, passe as bolinhas no ovo batido e depois, na farinha de rosca.",
+                    "Agora é só fritar em óleo quente até dourar."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 10,
+                name: "ARROZ BRANCO PARA INICIANTE",
+                time: 40,
+                servings: 2,
+                level: "Receitas salgadas",
+                tags: ["arroz", "arroz branco", "", ""],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/687808b90b1c0a69846bd348/fotos/7dda1aab-0e9e-4851-a386-7281fb5bdc14-xl.webp",
+                imageAlt: "arroz branco",
+                ingredients: [
+                    "1 unidade de Dente de alho médio/grande",
+                    "2 colheres de chá de Sal fino",
+                    "150 gramas de Arroz",
+                    "400 mililitros de Água filtrada quente",
+                    "50 mililitros de Óleo",
+                    "",
+                    
+                ],
+                instructions: [
+                    "Aqueça a água a 80º",
+                    "Junte o dente de alho com 1 colher de chá de sal e amasse até virar pasta",
+                    "Adicione o óleo na panela junto com a pasta de alho e deixe fritar até que o alho comece a ficar corado. Tempo médio 50s.",
+                    "Adicione o arroz à panela e misture com o alho corado. Deixe cozinhar até parte do arroz ficar frito com alguns grãos mais brancos. sempre mexendo na mistura. Tempo médio 60s.",
+                    "Adicione toda a água filtrada quente à panela, a segunda colher de chá de sal (a gosto e opcional) e misture. Tampe completamente a panela e deixe no fogo alto até que a água chegue ao nível do arroz.",
+                    "Desligue o fogo e deixe a panela semi aberta até que o arroz absorva quase toda a água. Tempo médio 15m.",
+                    "Para a etapa final complete novamente com água filtrada quente até a altura do arroz, tampe a panela e deixe no fogo baixo até secar o arroz.",
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 11,
+                name: "TORTA DE PRESUNTO E QUEIJO",
+                time: 60,
+                servings: 6,
+                level: "MASSAS SALGADAS",
+                tags: ["presunto e queijo", "torta", "presunto", "queijo"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/63c12f889c04d7a6dce07afc/fotos/58eb8258-168c-4621-98a3-2e1031144c52-xl.webp",
+                imageAlt: "torta de presunto e queijo",
+                ingredients: [
+                    "2 unidades de ovos",
+                    "1/2 xícara de óleo",
+                    "2 xícaras de leite",
+                    "1 colher de chá de sal",
+                    "50 gramas de parmesão ralado",
+                    "2 xícaras de farinha de trigo",
+                    "1 colher de sopa de de fermento em pó",
+                    "150 gramas de presunto fatiado",
+                    "150 gramas de muçarela fatiada",
+                    "Orégano a gosto"
+                    
+                ],
+                instructions: [
+                    "Adicione os ovos, o óleo, o leite, o sal, o parmesão ralado e bata por aproximadamente 2 minutos.",
+                    "Em seguida, adicione a farinha de trigo e bata novamente. Após isso, adicione o fermento em pó e mexa com uma colher até envolver completamente à massa.",
+                    "Despeje metade dessa massa na forma, espalhe e acrescente o presunto, o queijo e o orégano.",
+                    "Cubra o recheio com o restante da massa e espalhe novamente.",
+                    "Leve ao forno pré-aquecido a 180ºC por 40 minutos. Sirva ainda quente."
+                    
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 12,
+                name: "FRANGO FRITO",
+                time: 25,
+                servings: 2,
+                level: "FRITOS",
+                tags: ["almoço", "jantar", "frango", ""],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/654e5ced761155fbb8a5620c/fotos/ccc6f3bf-5a0c-46be-a068-c760b8d58bc7-xl.webp",
+                imageAlt: "frango frito",
+                ingredients: [
+                    "1 unidade de peito de frango",
+                    "3 unidades de ovo",
+                    "Pimenta-do-reino a gosto",
+                    "Sal a gosto",
+                    "Salsinha e cebolinha a gosto",
+                    "2 unidades de dente de alho",
+                    "50 gramas de queijo parmesão",
+                    "Farinha de trigo a gosto",
+                    "Óleo a gosto",
+                    "1 colher de sopa de manteiga"
+                    
+                ],
+                instructions: [
+                    "Para essa receita, comece cortando um peito de frango ao meio e depois, faça pequenos cortes. Cubra com o plástico filme e bata bem.",
+                    "Em um recipiente, adicione os ovos, a pimenta-do-reino, o sal, a salsinha e a cebolinha, o alho ralado, o queijo parmesão e misture bem.",
+                    "Agora, passe o frango na farinha de trigo e depois, na mistura que fizemos anteriormente.",
+                    "Em uma frigideira com o óleo ainda frio, adicione a manteiga. Depois, ligue em fogo médio e deixe esquentar.",
+                    "Assim que esquentar, adicione o frango e deixe fritar e dourar dos dois lados."
+                    
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 13,
+                name: "BOLINHO DE BACALHAU",
+                time: 120,
+                servings: 8,
+                level: "FRITOS",
+                tags: ["bacalhau", "aperitivo", "almoço", ""],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/6765b8fda1066f178d297b54/fotos/5552d13a-16fb-401e-ae73-a12a11be756a-xl.webp",
+                imageAlt: "bolinho de bacalhau",
+                ingredients: [
+                    "500 gramas de bacalhau dessalgado e desfiado",
+                    "Óleo a gosto",
+                    "2 unidades de cebola",
+                    "4 unidades de dente de alho",
+                    "50 gramas de alho-poró",
+                    "1 unidade de tomate",
+                    "1/2 unidade de pimenta dedo-de-moça sem semente",
+                    "Pimenta-do-reino a gosto",
+                    "Salsinha e cebolinha a gosto",
+                    "750 gramas de batata cozida",
+                    "Sal a gosto",
+                    "2 unidades de ovo",
+                    "75 gramas de farinha de rosca"
+                    
+                ],
+                instructions: [
+                    "Em uma panela com água, adicione o bacalhau e deixe cozinhar. Depois, desfie.",
+                    "Em outra panela, adicione o óleo, a cebola picada e deixe refogar, mas sem deixar dourar.",
+                    "Em seguida, acrescente o alho picado, o alho-poró e misture bem.",
+                    "Depois, adicione o tomate picado, a pimenta dedo-de-moça picada sem a semente e deixe cozinhar por mais 1 minuto.",
+                    "Agora, adicione o bacalhau desfiado e misture tudo muito bem.",
+                    "Finalize com a pimenta-do-reino e a salsinha e a cebolinha.",
+                    "Em um recipiente, despeje o bacalhau que fizemos anteriormente e acrescente a batata cozida e amassada e misture bem. Nesse momento, se precisar, adicione um pouco de sal.",
+                    "Acrescente os ovos batidos, a farinha de rosca aos poucos e misture até chegar no ponto ideal.",
+                    "Depois, cubra com o plástico filme e leve para a geladeira por 1 hora.",
+                    "Pegue um pouco da massa e faça bolinhas de aproximadamente 20g cada uma.",
+                    "Depois, é só fritar em óleo quente até dourar."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 14,
+                name: "PÃO DE QUEIJO",
+                time: 60,
+                servings: 6,
+                level: "ASSADOS",
+                tags: ["pão de queijo", "queijo", "café da manhã", ""],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/67e2b0e54574fde4c78e2ec3/fotos/8d3cd5d1-f2c6-4bf7-a316-21b81a3833f6-xl.webp",
+                imageAlt: "pão de queijo",
+                ingredients: [
+                    "1 xícara de água",
+                    "1 xícara de leite",
+                    "1 xícara de óleo",
+                    "1 colher de sopa de sal",
+                    "1 quilo de polvilho azedo",
+                    "1 xícara de farinha de milho",
+                    "1 xícara de água",
+                    "200 gramas de queijo parmesão",
+                    "200 gramas de muçarela ralada",
+                    "3 unidades de ovo"
+                    
+                    
+                ],
+                instructions: [
+                    "Em uma panela, adicione 1 xícara de água, o leite, o óleo, o sal e misture até levantar fervura.",
+                    "Em um recipiente, adicione o polvilho azedo, a farinha de milho, 1 xícara de água e com as mãos, misture bem.",
+                    "Agora, despeje a mistura da panela e misture bem.",
+                    "Acrescente o queijo parmesão, a muçarela ralada, os ovos e misture novamente até chegar no ponto ideal.",
+                    "Depois, modele em formato de bolinha.",
+                    "Transfira para uma forma e leve ao forno preaquecido a 200 graus por 20 minutos.",
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 15,
+                name: "PANQUEQUINHAS COM DOCE DE LEITE",
+                time: 40,
+                servings: 6,
+                level: "MASSAS DOCES",
+                tags: ["café da manhã", "panqueca", "receita rapida", ""],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/68cd32fa6d5eb92d29c5479c/fotos/2328db30-9829-4bd8-804e-c5ef22b2df0b-xl.webp",
+                imageAlt: "panqueca com doce de leite",
+                ingredients: [
+                    "1 unidade de ovo",
+                    "1/2 xícara de leite",
+                    "1 colher de sopa de óleo",
+                    "1 colher de chá de essência de baunilha",
+                    "2 colheres de sopa de açúcar",
+                    "1 colher de chá de sal",
+                    "1 xícara de farinha de trigo",
+                    "2 colheres de chá de fermento em pó",
+                    "Doce de leite a gosto"
+                    
+                ],
+                instructions: [
+                    "Em um recipiente, adicione o ovo, o leite, o óleo, a essência de baunilha e misture bem.",
+                    "Em seguida, acrescente o açúcar, o sal, a farinha de trigo e misture novamente.",
+                    "Finalize com o fermento em pó e misture levemente.",
+                    "Para facilitar, coloque a massa em uma bisnaga de maionese.",
+                    "Unte uma frigideira levemente e deixe aquecer.",
+                    "Coloque a massa, aos poucos e deixe dourar dos dois lados.",
+                    "Depois, é só finalizar com o doce de leite."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 16,
+                name: "MOUSSE DE MARACUJÁ TRUFADO",
+                time: 330,
+                servings: 8,
+                level: "SOBREMESA",
+                tags: ["maracuja", "trufado", "receita doce", ""],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/68beca546d5eb92d29bdb609/fotos/4000658a-7195-4d9c-8c36-9a6e81238bd3-xl.webp",
+                imageAlt: "mousse de maracujá trufado",
+                ingredients: [
+                    "300 mililitros de poupa de maracujá",
+                    "1 xícara de leite em pó",
+                    "395 gramas de leite condensado",
+                    "400 gramas de creme de leite",
+                    "300 gramas de chocolate meio amargo",
+                    "300 gramas de creme de leite",
+                    "100 gramas de chocolate meio amargo"
+                    
+                ],
+                instructions: [
+                    "No mixer ou no liquidificador, adicione a poupa de maracujá e bata bem.",
+                    "No mixer ou no liquidificador, adicione a poupa de maracujá e bata bem.",
+                    "Ligue em fogo médio e mexa até ela reduzir e chegar e ganhar consistência.",
+                    "Transfira para o liquidificador, adicione o leite em pó, o leite condensado, 400g de creme de leite e bata bem.",
+                    "Em um recipiente, adicione 300g de chocolate meio amargo derretido, 300g de creme de leite e misture muito bem.",
+                    "Em uma travessa, adicione um pouco do creme de chocolate e espalhe.",
+                    "Em seguida, acrescente um pouco do creme de maracujá e espalhe bem.",
+                    "Repita o mesmo processo até acabar os ingredientes.",
+                    "Depois, leve para a geladeira por 3 horas.",
+                    "Finalize com 100g de chocolate meio amargo derretido e espalhe bem.",
+                    "Leve para a geladeira por mais 2 horas."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 17,
+                name: "TORTA DE FRANGO SEM MASSA",
+                time: 70,
+                servings: 6,
+                level: "ASSADOS",
+                tags: ["torta", "frango", "pratico"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/6205479dd47c3582e99580e2/fotos/7a06cc1e-ee67-4eb6-9fdd-849a380f959f-xl.webp",
+                imageAlt: "torta de frango sem massa",
+                ingredients: [
+                    "Azeite a gosto",
+                    "1 unidade de cebola",
+                    "3 unidades de dentes de alho",
+                    "400 gramas de peito de frango cozido e desfiado",
+                    "Páprica picante a gosto",
+                    "Tempero para aves a gosto",
+                    "Pimenta-do-reino a gosto",
+                    "Sal a gosto",
+                    "1 unidade de pimentão verde",
+                    "200 gramas de milho verde fresco",
+                    "Salsinha e cebolinha a gosto",
+                    "6 unidades de ovos",
+                    "400 gramas de creme de leite light",
+                    "100 gramas de muçarela light ralada",
+                    "1 colher de sopa de fermento em pó",
+                    "Muçarela light ralada a gosto",
+                ],
+                instructions: [
+                    "Em uma panela, adicione o azeite, a cebola e o alho picados e deixe fritar. Em seguida, acrescente o pimentão verde picado e misture.",
+                    "Depois, adicione o frango cozido e desfiado, a páprica picante, o tempero para aves, a pimenta-do-reino, o sal e misture bem.",
+                    "Acrescente o milho, a salsinha e cebolinha e misture novamente.",
+                    "No liquidificador, adicione os ovos, o creme de leite, a muçarela ralada, o fermento em pó, o sal e bata tudo muito bem.",
+                    "Em uma travessa untada, adicione a metade da mistura do liquidificador.",
+                    "Em seguida, acrescente o recheio de frango e depois, o restante da mistura.",
+                    "Finalize com a muçarela ralada por cima e leve ao forno preaquecido a 180 graus por 40 minutos."
+                 
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 18,
+                name: "PASTEL ASSADO",
+                time: 90,
+                servings: 5,
+                level: "ASSADOS",
+                tags: ["receita simples", "receita fácil", "pastel", "receita rápida", "carne moída"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/6717956fe6754ffb2a531e38/fotos/4b28eb43-92f3-4ae2-bdc0-65c7a573c348-xl.webp",
+                imageAlt: "pastel assado",
+                ingredients: [
+                    "Azeite a gosto",
+                    "1 quilo de carne moída",
+                    "Sal a gosto",
+                    "Cominho a gosto",
+                    "Noz-moscada a gosto",
+                    "Pimenta-do-reino a gosto",
+                    "1 unidade de cebola",
+                    "3 dentes de alho",
+                    "Azeitona a gosto",
+                    "Salsinha e cebolinha a gosto",
+                    "Páprica defumada a gosto",
+                    "2 xícaras de farinha de trigo",
+                    "1/2 xícara de creme de leite",
+                    "1/2 xícara de manteiga",
+                    "1 unidade de gema de ovo"
+                ],
+                instructions: [
+                    "Em uma frigideira, adicione o azeite, a carne moída e tempere com o sal, o cominho, a noz-moscada, a pimenta-do-reino e deixe cozinhar até secar a água.",
+                    "Em seguida, acrescente a cebola e o alho picados e misture bem.",
+                    "Depois, adicione a azeitona, a salsinha e cebolinha, a páprica defumada e misture novamente.",
+                    "Em um recipiente, adicione a farinha de trigo, o creme de leite, a manteiga, o sal e misture bem até virar uma massa.",
+                    "Depois, abra a massa e corte em partes iguais.",
+                    "Pegue um pedaço da massa e com um rolo, abra bem.",
+                    "Adicione o recheio de carne moída e depois, feche.",
+                    "Agora, pressione as laterais com um garfo.",
+                    "Transfira para uma forma untada com azeite e faça alguns furos nos pastéis.",
+                    "Pincele a gema de ovo por cima e leve ao forno preaquecido a 200 graus por 40 minutos."
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 19,
+                name: "ESFIRRA DE CARNE",
+                time: 100,
+                servings: 6,
+                level: "MASSAS SALGADAS",
+                tags: ["esfirra", "receita simples", "receita fácil", "carne", "aperitivos"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/65e9977bb24502b8d10d9fe8/fotos/fd4187d1-b98a-4e89-ad09-ba30dafc07d1-xl.webp",
+                imageAlt: "esfirra de carne",
+                ingredients: [
+                    "300 mililitros de leite morno",
+                    "50 mililitros de óleo",
+                    "2 colheres de sopa de manteiga",
+                    "3 colheres de sopa de açúcar",
+                    "1/2 colher de chá de sal",
+                    "10 gramas de fermento biológico seco",
+                    "500 gramas de farinha de trigo",
+                    "500 gramas de carne moída",
+                    "1 unidade de cebola",
+                    "2 unidades de tomate",
+                    "Salsinha e cebolinha a gosto",
+                    "1/2 unidade de limão",
+                    "Sal a gosto",
+                    "Páprica picante a gosto",
+                    "Pimenta-do-reino a gosto",
+                    "Fubá a gosto"
+                ],
+                instructions: [
+                    "Em um recipiente, adicione o leite morno, o óleo, 1 colher de sopa de manteiga, o açúcar, o sal, o fermento biológico seco e misture bem.",
+                    "Em seguida, adicione a farinha de trigo aos poucos e misture.",
+                    "Depois, sove por aproximadamente 10 minutos.",
+                    "Cubra com um plástico filme e deixe descansar por 40 minutos.",
+                    "Agora, divida a massa em pedaços de 50 gramas cada, boleie e reserve.",
+                    "Em um recipiente, adicione a carne moída, a cebola picada, o tomate sem semente picado, a salsinha e cebolinha, o suco do limão e misture bem.",
+                    "Acrescente 1 colher de sopa de manteiga, o sal, a páprica picante, a pimenta-do-reino e misture bem.",
+                    "Polvilhe fubá na mesa, adicione as bolinhas e faça uma cavidade ao meio.",
+                    "Depois, acrescente o recheio de carne moída e espalhe bem.",
+                    "Coloque em uma forma untada com azeite e leve ao forno preaquecido a 250 graus por aproximadamente entre 7 a 15 minutos."
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 20,
+                name: "ENROLADO DE PRESUNTO E QUEIJO",
+                time: 150,
+                servings: 5,
+                level: "SALGADOS E LANCHES",
+                tags: ["receita salgada", "pão salgado", "enrolado", "presunto e muçarela"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/611573debd0478b2e0a895da/fotos/f53f6ae2-2c1d-41f2-a2b1-be78f6deee3f-xl.webp",
+                imageAlt: "Enrolado de presunto e queijo",
+                ingredients: [
+                    "10 gramas de fermento biológico seco",
+                    "240 mililitros de leite",
+                    "1/4 xícara de açúcar",
+                    "3 ovos",
+                    "1/4 xícara de óleo",
+                    "4 xícaras de farinha de trigo",
+                    "1 colher de sopa de sal",
+                    "Requeijão a gosto",
+                    "300 gramas de muçarela fatiada",
+                    "300 gramas de presunto ralado",
+                    "Orégano a gosto"
+                ],
+                instructions: [
+                    "Em um recipiente, adicione o fermento biológico seco e o leite morno. Misture e tampe com um pano por 5 minutos.",
+                    "Adicione o açúcar, 2 ovos, o óleo e misture. Acrescente a farinha de trigo aos poucos e agregue. Em seguida, acrescente o sal e misture. Adicione o restante da farinha e misture novamente.",
+                    "Salpique farinha sobre a mesa. Sove a massa até ficar lisa e não grudar nas mãos. Transfira para um recipiente, tampe e deixe descansar por 40 minutos.",
+                    "Divida a massa em 2 partes iguais. Abra a massa na mesa enfarinhada para rechear.",
+                    "Adicione o requeijão, espalhe bem, acrescente a muçarela em fatias, o presunto ralado e o orégano. Pincele água na borda e feche a massa. Retire o excesso das pontas.",
+                    "Corte a massa em pedaços de cerca de 4 dedos de espessura. Polvilhe farinha em uma forma e coloque os enroladinhos. Rende aproximadamente 15 unidades.",
+                    "Pincele 1 ovo batido sobre os enroladinhos e polvilhe orégano. Leve ao forno pré-aquecido a 180°C por cerca de 30 minutos."
+                ],
+
+
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 21,
+                name: "BOLINHA DE QUEIJO",
+                time: 75,
+                servings: 6,
+                level: "FRITOS",
+                tags: ["bolinha de queijo", "lanche", "salgado", "aperitivos", "frito"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/66e2cdc2de336058ea565cee/fotos/9c301bfa-c313-485f-a3ba-a7157b1f4566-xl.webp",
+                imageAlt: "bolinha de queijo",
+                ingredients: [
+                    "500 mililitros de leite",
+                    "200 mililitros de água",
+                    "2 colheres de sopa de manteiga",
+                    "1 unidade de caldo de galinha",
+                    "1 colher de chá de sal",
+                    "500 gramas de farinha de trigo",
+                    "Muçarela a gosto",
+                    "Leite a gosto",
+                    "Farinha panko a gosto",
+                    "Óleo a gosto"
+                ],
+                instructions: [
+                    "Em uma panela, adicione o leite, a água, a manteiga, o caldo de galinha, o sal e misture bem até ferver.",
+                    "Assim que começar a ferver, acrescente a farinha de trigo e continue mexendo em fogo médio por 3 minutos.",
+                    "Assim que esfriar, pegue um pouco da massa, abra bem, adicione o queijo e depois, feche bem.",
+                    "Para empanar, passe as bolinhas no leite e na farinha panko.",
+                    "Depois, é só fritar em óleo quente até dourar."
+                
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 22,
+                name: "BOLINHO DE LINGUIÇA" ,
+                time: 60,
+                servings: 5,
+                level: "FRITOS",
+                tags: ["bolinho de linguiça", "salgado", "aperitivos", "frito", "queijo"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/62fa81cb003cfcdf2c5e51e5/fotos/eb0eb103-715f-4ea1-8a08-0863a4799602-xl.webp",
+                imageAlt: "bolinho de linguiça",
+                ingredients: [
+                    "1 quilo de linguiça",
+                    "2 unidades de ovos",
+                    "1 xícara de farinha de rosca",
+                    "Salsinha e cebolinha a gosto",
+                    "200 gramas de muçarela",
+                    "Farinha de trigo a gosto",
+                    "2 unidades de ovos batidos",
+                    "Farinha panko a gosto",
+                    "Óleo a gosto"
+                ],
+                instructions: [
+                    "Para essa receita, comece retirando a pele da linguiça e transfira para um recipiente.",
+                    "Em seguida, acrescente os ovos, a farinha de rosca e com as mãos, misture muito bem.",
+                    "Depois, adicione a salsinha e cebolinha e misture novamente.",
+                    "Unte as mãos com um pouco de óleo, pegue um pouco da massa, abra bem, adicione o queijo e depois, feche e modele.",
+                    "Para empanar, passe na farinha de trigo, nos ovos batidos e por fim, na farinha panko.",
+                    "Depois, é só fritar em óleo quente até dourar."
+                ],
+
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+            },
+            {
+                id: 23,
+                name: "PAVÊ DE LEITE NINHO COM MORANGOS",
+                time: 275,
+                servings: 8,
+                level: "SOBREMESA",
+                tags: ["pavê", "sobremesa", "leite ninho", "morango", "receita fácil", "natal"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/61a51bc27d4203b8ee24fa41/fotos/88cd9f76-934d-4e18-8ec0-1a01fe2d84db-xl.webp",
+                imageAlt: "pavê de leite ninho com morangos",
+                ingredients: [
+                    "200 gramas de creme de leite",
+                    "395 gramas de leite condensado",
+                    "1 xícara de leite em pó",
+                    "1 colher de sopa de amido de milho",
+                    "300 mililitros de leite",
+                    "300 gramas de biscoito maizena",
+                    "400 gramas de morango",
+                    "Leite em pó a gosto",
+                    "Morangos a gosto"
+                ],
+                instructions: [
+                    "Em uma panela, adicione o creme de leite, o leite condensado, o leite em pó, o amido de milho e misture bem. Ligue em fogo médio e mexa até engrossar. Acrescente o leite e continue mexendo até chegar no ponto ideal.",
+                    "Em uma travessa, adicione um pouco do creme e espalhe bem. Em seguida, acrescente o biscoito maizena. Depois adicione os morangos picados e espalhe. Repita esse processo até acabar todos os ingredientes.",
+                    "Leve para à geladeira por 4 horas.",
+                    "Finalize com leite em pó e morangos a gosto ou da maneira que preferir."
+                ],
+                tips: [
+                    "",
+                    "",
+                    "",
+                    
+                ]
+                },
+            {
+                id: 24,
+                name: "PÃO DE MEL SAUDÁVEL",
+                time: 50,
+                servings: 6,
+                level: "SOBREMESA",
+                tags: ["receita saudável", "sobremesa", "receita doce", "receita simples", "receita fácil"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/68482c894311f4e513e16587/fotos/396259e2-baf5-4e69-b52a-b3c73d591515-xl.webp",
+                imageAlt: "Pão de mel saudável",
+                ingredients: [
+                    "3 ovos",
+                    "3 colheres de sopa de farinha de aveia",
+                    "3 colheres de sopa de cacau em pó",
+                    "2 colheres de sopa de iogurte natural desnatado",
+                    "1 colher de sopa de mel",
+                    "Canela em pó a gosto",
+                    "1 colher de sopa de fermento em pó",
+                    "Doce de leite a gosto",
+                    "Chocolate derretido a gosto"
+                ],
+                instructions: [
+                    "Em um recipiente, adicione os ovos, a farinha de aveia, o cacau em pó, o iogurte natural desnatado, o mel, a canela em pó e misture tudo muito bem.",
+                    "Em seguida, acrescente o fermento em pó e misture levemente.",
+                    "Transfira para as forminhas de silicone e leve ao forno preaquecido a 180°C por 25 minutos.",
+                    "Depois, corte ao meio e recheie com o doce de leite.",
+                    "Finalize com o chocolate derretido a gosto.",
+                    "Leve para a geladeira por aproximadamente 10 minutos."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 25,
+                name: "SOBREMESA NO POTE BRIGADEIRO CREMOSO",
+                time: 270,
+                servings: 6,
+                level: "SOBREMESA",
+                tags: ["doce", "sobremesa", "brigadeiro", "receita simples", "receita fácil"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/63126e8e7578f533ccf15900/fotos/832871ef-0054-4845-a677-12cd35a7fc20-xl.webp",
+                imageAlt: "Sobremesa no pote brigadeiro cremoso",
+                ingredients: [
+                    "790 gramas de leite condensado",
+                    "800 gramas de creme de leite",
+                    "5 colheres de sopa de chocolate em pó",
+                    "2 colheres de sopa de manteiga",
+                    "100 gramas de chocolate meio amargo",
+                    "6 unidades de pote de 170 ml",
+                    "Granulado a gosto"
+                ],
+                instructions: [
+                    "Em uma panela, adicione o leite condensado, o creme de leite, o chocolate em pó e misture muito bem. Em seguida, acrescente a manteiga e o chocolate meio amargo, ligue em fogo médio e mexa até engrossar.",
+                    "Transfira para os potinhos de plástico, espalhe bem e adicione o granulado por cima.",
+                    "Feche bem e leve para geladeira por aproximadamente 4 horas."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 26,
+                name: "PIZZA CASEIRA",
+                time: 180,
+                servings: 4,
+                level: "MASSAS SALGADAS",
+                tags: ["receita salgada", "pizza", "calabresa", "receita simples", "receita fácil"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/623afa4faa1eba7365880da0/fotos/15a53e98-701a-4787-a714-c00f0347f580-xl.webp",
+                imageAlt: "Pizza caseira",
+                ingredients: [
+                    "2 xícaras de farinha de trigo",
+                    "1 colher de chá de fermento biológico",
+                    "1 colher de sopa de açúcar",
+                    "1 colher de chá de sal",
+                    "9 mililitros de óleo",
+                    "150 mililitros de água",
+                    "Catupiry a gosto",
+                    "Molho de tomate a gosto",
+                    "Muçarela ralada a gosto",
+                    "Calabresa a gosto",
+                    "Orégano a gosto"
+                ],
+                instructions: [
+                    "Em um recipiente, adicione a farinha de trigo, o fermento biológico e misture. Em seguida, acrescente o açúcar, o sal, o óleo e a água. Misture bem com as mãos.",
+                    "Transfira a massa para uma mesa e sove até ficar bem lisa.",
+                    "Coloque a massa em um recipiente, cubra com plástico filme e deixe descansar por 1 hora e 30 minutos.",
+                    "Abra a massa com um rolo.",
+                    "Transfira para uma forma, deixando 2cm de massa para fora. Adicione o catupiry nas laterais e feche, apertando bem com os dedos.",
+                    "Acrescente o molho de tomate e espalhe. Leve ao forno pré-aquecido a 250°C por 10 minutos.",
+                    "Adicione mais molho de tomate, a muçarela ralada e a calabresa cortada em rodelas.",
+                    "Leve novamente ao forno por mais 10 minutos.",
+                    "Finalize com orégano a gosto."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 27,
+                name: "PANQUECA COM CARNE MOÍDA",
+                time: 90,
+                servings: 8,
+                level: "MASSAS SALGADAS",
+                tags: ["receita salgada", "panqueca", "carne moída", "almoço", "receita simples"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/623df418aa1eba736589032f/fotos/44225168-f4a7-4b38-a95c-974bc76d4800-xl.webp",
+                imageAlt: "Panqueca com carne moída",
+                ingredients: [
+                    "Azeite a gosto",
+                    "2 unidades de cebolas",
+                    "3 dentes de alho",
+                    "500 gramas de carne moída",
+                    "Páprica defumada a gosto",
+                    "Sal a gosto",
+                    "Pimenta-do-reino a gosto",
+                    "1 unidade de pimentão verde",
+                    "1 unidade de tomate",
+                    "Azeitona a gosto",
+                    "340 gramas de molho de tomate",
+                    "1 xícara de água",
+                    "Salsinha a gosto",
+                    "Cebolinha a gosto",
+                    "2 ovos",
+                    "500 mililitros de leite",
+                    "2 xícaras de farinha de trigo",
+                    "4 colheres de sopa de óleo",
+                    "Manteiga a gosto",
+                    "200 gramas de extrato de tomate",
+                    "200 gramas de molho de tomate",
+                    "2 colheres de chá de açúcar",
+                    "Muçarela ralada a gosto"
+                ],
+                instructions: [
+                    "Em uma panela, adicione o azeite, 1 cebola picada e deixe fritar. Acrescente 2 dentes de alho picado e misture. Depois adicione a carne moída e deixe cozinhar até secar a água.",
+                    "Assim que secar a água, acrescente a páprica defumada, o sal, a pimenta-do-reino, o pimentão picado, o tomate picado e a azeitona. Misture novamente.",
+                    "Acrescente 340g de molho de tomate e 1 xícara de água, misture bem. Finalize com salsinha e cebolinha, misture e reserve.",
+                    "No liquidificador, bata os ovos, leite, farinha de trigo, sal e óleo até formar uma massa homogênea.",
+                    "Unte uma frigideira com manteiga, adicione um pouco da massa e espalhe. Cozinhe em fogo baixo até dourar dos dois lados.",
+                    "Em uma panela, adicione azeite, 1 cebola picada e deixe fritar. Acrescente 1 dente de alho ralado, depois o extrato de tomate, 200g de molho de tomate, sal e açúcar. Misture e finalize com salsinha e cebolinha, reserve.",
+                    "Recheie a massa com carne moída e enrole. Repita até acabar todos os ingredientes.",
+                    "Adicione um pouco do molho em um refratário, espalhe bem e coloque as panquecas. Acrescente o restante do molho por cima.",
+                    "Finalize com muçarela ralada e leve ao forno pré-aquecido a 180°C por 15 minutos."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 28,
+                name: "TORTA-COOKIE TRADICIONAL",
+                time: 60,
+                servings: 8,
+                level: "MASSAS DOCES",
+                tags: ["torta", "cookie", "massa doce", "sobremesa", "receita fácil"],
+                image: "https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2020/07/23/torta-cookie-tradicional.jpg",
+                imageAlt: "Torta-cookie tradicional",
+                ingredients: [
+                    "1 xícara de manteiga",
+                    "1 xícara de açúcar mascavo",
+                    "1/2 xícara de leite",
+                    "1 ovo",
+                    "1 colher de chá de fermento em pó",
+                    "3 xícaras de farinha de trigo",
+                    "1 e 1/2 xícara de gotas de chocolate ao leite"
+                ],
+                instructions: [
+                    "No liquidificador, bata a manteiga, o açúcar, o leite e o ovo até ficar homogêneo.",
+                    "Transfira para uma tigela e misture o restante dos ingredientes até formar uma massa homogênea.",
+                    "Transfira a massa para uma forma de aro removível de 20 cm forrada com papel-manteiga.",
+                    "Leve ao forno médio, preaquecido, por 30 minutos ou até firmar levemente.",
+                    "Deixe amornar, desenforme e sirva."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 29,
+                name: "TORTA DE LIMÃO COM MERENGUE",
+                time: 45,
+                servings: 8,
+                level: "MASSAS DOCES",
+                tags: ["torta", "limão", "merengue", "massa doce", "sobremesa", "receita fácil"],
+                image: "https://guiadacozinha.com.br/wp-content/uploads/2019/10/torta-de-limao-com-merengue-33070.jpg",
+                imageAlt: "Torta de limão com merengue",
+                ingredients: [
+                    "2 xícaras de farinha de trigo peneirada",
+                    "4 colheres de sopa de manteiga amolecida",
+                    "1/2 xícara de creme de leite",
+                    "1 colher de chá de fermento em pó químico",
+                    "1 pitada de sal",
+                    "Raspas de casca de limão para decorar",
+                    "1 lata de leite condensado",
+                    "1 lata de creme de leite",
+                    "1/2 xícara de suco de limão",
+                    "1 colher de sopa de raspas de limão",
+                    "4 claras",
+                    "4 colheres de sopa de açúcar"
+                ],
+                instructions: [
+                    "Em uma tigela, misture a farinha de trigo, a manteiga, o creme de leite, o fermento e o sal com a ponta dos dedos até formar uma massa homogênea.",
+                    "Embrulhe a massa em filme plástico e leve à geladeira por 30 minutos.",
+                    "Forre o fundo e as laterais de uma forma de fundo removível de 25 cm com a massa, fure com um garfo e leve ao forno médio preaquecido por 25 minutos ou até dourar. Deixe esfriar.",
+                    "Para o recheio, misture o leite condensado, o creme de leite, o suco de limão e as raspas de limão até adquirir consistência cremosa.",
+                    "Recheie a massa e leve à geladeira por 2 horas ou até firmar.",
+                    "Para a cobertura, bata as claras em neve e adicione o açúcar aos poucos até obter merengue firme.",
+                    "Coloque o merengue sobre o recheio e leve ao forno alto preaquecido por 5 minutos ou até dourar.",
+                    "Mantenha na geladeira até servir."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            }, 
+            {
+                id: 30,
+                name: "TORTA DE MARACUJÁ CREMOSA COM CALDA",
+                time: 240,
+                servings: 8,
+                level: "MASSAS DOCES",
+                tags: ["torta", "maracujá", "massa doce", "sobremesa", "receita fácil", "geleia"],
+                image: "https://receitatodahora.com.br/wp-content/uploads/2023/04/torta-de-maracuja-20-04-1024x683.jpg.webp",
+                imageAlt: "Torta de maracujá cremosa com calda",
+                ingredients: [
+                    "4 colheres de sopa de manteiga derretida",
+                    "1 ½ pacote de biscoito maisena",
+                    "Polpa de 1 maracujá",
+                    "½ xícara de chá de açúcar",
+                    "½ xícara de chá de água",
+                    "250 ml de suco concentrado de maracujá",
+                    "½ envelope de gelatina incolor sem sabor",
+                    "3 colheres de sopa de água para gelatina",
+                    "2 caixinhas de creme de leite",
+                    "1 caixinha de leite condensado",
+                    "150 ml de chantilly batido em picos firmes"
+                ],
+                instructions: [
+                    "No liquidificador, triture os biscoitos maisena até formar uma farinha fina. Misture com a manteiga derretida até formar uma massinha homogênea.",
+                    "Forre uma forma de fundo removível (20 cm x 8 cm) com a massinha e leve ao forno preaquecido a 180°C por 10 minutos. Deixe esfriar.",
+                    "Para a geleia, misture água, açúcar e polpa do maracujá em uma panela. Cozinhe em fogo baixo até reduzir e formar uma consistência de geleia. Deixe esfriar.",
+                    "Para o recheio, hidrate a gelatina na água e dissolva conforme instruções. Misture leite condensado, creme de leite e suco concentrado de maracujá. Adicione a gelatina e incorpore o chantilly delicadamente.",
+                    "Despeje o recheio sobre a base fria, espalhe para nivelar, cubra com plástico filme e leve à geladeira por 3-4 horas.",
+                    "Despeje a geleia de maracujá sobre o recheio, cubra novamente e leve à geladeira por mais 1-2 horas.",
+                    "Desenforme e sirva gelado."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 31,
+                name: "EMPADINHA DOCE (LEITE CONDENSADO)",
+                time: 50,
+                servings: 12,
+                level: "MASSAS DOCES",
+                tags: ["empada", "empadinha", "massa doce", "doce", "leite condensado"],
+                image: "https://guiadacozinha.com.br/wp-content/uploads/2012/01/empadinhadoce.jpg",
+                imageAlt: "Empadinha doce recheada",
+                ingredients: [
+                    "2 xícaras de farinha de trigo",
+                    "100 g de manteiga ou margarina gelada",
+                    "1 gema",
+                    "3 colheres de sopa de açúcar",
+                    "Doce de leite ou leite condensado cozido para rechear",
+                    "Coco ralado (opcional)"
+                ],
+                instructions: [
+                    "Misture a farinha com a manteiga e o açúcar até formar uma farofa.",
+                    "Adicione a gema e trabalhe até formar uma massa homogênea; leve à geladeira por 15-30 minutos.",
+                    "Forre forminhas de empada com a massa, fure o fundo com um garfo e pré-asse por alguns minutos.",
+                    "Recheie com doce de leite ou leite condensado cozido e feche com tampinhas de massa se desejar.",
+                    "Asse até dourar levemente. Deixe esfriar antes de desenformar."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+                },
+            {
+                id: 32,
+                name: "CHOCOTTONE CASEIRO",
+                time: 150,
+                servings: 8,
+                level: "MASSAS DOCES",
+                tags: ["chocottone", "panettone", "massa doce", "natal", "receita fácil"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/656866b6761155fbb8ba0333/fotos/fc9659d7-dfbb-4316-a5fa-08ded3f6cb34-xl.webp",
+                imageAlt: "Chocottone caseiro",
+                ingredients: [
+                    "3 ovos",
+                    "120 gramas de manteiga",
+                    "120 gramas de açúcar",
+                    "1 colher de chá de essência de panettone ou baunilha",
+                    "250 mililitros de água morna",
+                    "10 gramas de fermento biológico seco",
+                    "500 gramas de farinha de trigo",
+                    "300 gramas de gotas de chocolate"
+                ],
+                instructions: [
+                    "No liquidificador, adicione os ovos, a manteiga, o açúcar, a essência de panettone (ou baunilha), a água morna e o fermento biológico seco e bata tudo muito bem.",
+                    "Despeje em um recipiente, adicione a farinha de trigo e misture bem.",
+                    "Cubra com plástico filme e deixe descansar por 30 minutos.",
+                    "Depois, acrescente as gotas de chocolate e misture novamente.",
+                    "Transfira a massa para uma forma de panettone e espalhe bem.",
+                    "Adicione gotas de chocolate por cima e deixe descansar por mais 30 minutos.",
+                    "Leve ao forno preaquecido a 180°C por aproximadamente 40 minutos."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+
+            {
+                id: 33,
+                name: "PASTEL ASSADO (MASSA CASEIRA)",
+                time: 70,
+                servings: 8,
+                level: "ASSADOS",
+                tags: ["pastel assado", "assados", "salgado", "lanche"],
+                image: "https://guiadacozinha.com.br/wp-content/uploads/2019/10/pastel-assado-21809-350x230.jpg",
+                imageAlt: "Pastel assado na assadeira",
+                ingredients: [
+                    "3 xícaras de farinha de trigo",
+                    "1 colher de chá de sal",
+                    "1/2 xícara de óleo",
+                    "1 xícara de leite (aprox.)",
+                    "1 colher de sopa de fermento químico (opcional)",
+                    " Recheio a gosto (carne, frango, queijo)"
+                ],
+                instructions: [
+                    "Misture a farinha, sal, óleo e adicione o leite aos poucos até formar uma massa macia; sove e deixe descansar 20–30 min.",
+                    "Abra a massa com um rolo, corte discos ou retângulos, coloque recheio no centro e feche pressionando as bordas.",
+                    "Pincele com ovo batido e asse em forno preaquecido a 200°C por 15–25 minutos até dourar.",
+                    "Sirva quente."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id:34,
+                name: "CHURROS (MASSA PARA FRITAR)",
+                time: 30,
+                servings: 6,
+                level: "FRITOS",
+                tags: ["churros", "frito", "massa doce", "doce de rua"],
+                image: "https://static.itdg.com.br/images/100-80/4cfefec8fa84655e3e04a09397a49e6d/71351-original.jpg",
+                imageAlt: "Churros fritos polvilhados",
+                ingredients: [
+                    "1 xícara de água",
+                    "2 colheres de sopa de manteiga",
+                    "1 pitada de sal",
+                    "1 colher de sopa de açúcar",
+                    "1 xícara de farinha de trigo",
+                    "2 ovos",
+                    "Óleo para fritar",
+                    "Açúcar e canela para polvilhar"
+                ],
+                instructions: [
+                    "Ferva água com manteiga, sal e açúcar; retire do fogo e adicione a farinha de uma vez, mexendo até formar uma bola.",
+                    "Ainda morna, junte os ovos um a um até formar uma massa lisa e homogênea.",
+                    "Coloque a massa no saco de confeitar com bico estrelado e modele os churros direto no óleo quente.",
+                    "Frite até dourar, escorra e passe em mistura de açúcar e canela. Recheie a gosto com doce de leite ou chocolate."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 35,
+                name: "FRANGO RECHEADO DE FORNO",
+                time: 90,
+                servings: 3,
+                level: "ASSADOS",
+                tags: ["almoço", "jantar", "frango", "receita simples", "receita fácil"],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/647f1f9ac14c83fcf41879de/fotos/e52b7be9-6628-4530-a36a-e9aa526207d2-xl.webp",
+                imageAlt: "Frango recheado de forno",
+                ingredients: [
+                    "600 gramas de filé de frango",
+                    "1/2 unidade de limão (suco)",
+                    "6 dentes de alho",
+                    "Sal a gosto",
+                    "Páprica defumada a gosto",
+                    "1 colher de sopa de manteiga",
+                    "1 unidade de cebola",
+                    "1 unidade de pimentão verde",
+                    "1 unidade de pimentão amarelo",
+                    "2 unidades de cenouras (raladas)",
+                    "Salsinha e cebolinha a gosto",
+                    "8 colheres de sopa de creme de leite",
+                    "100 gramas de muçarela ralada",
+                    "Azeite a gosto"
+                ],
+                instructions: [
+                    "Em um recipiente, tempere os filés de frango com o suco do limão, 3 dentes de alho picado, sal e páprica defumada. Misture com as mãos e deixe marinar por 20 minutos.",
+                    "Aqueça a manteiga em uma frigideira, refogue 3 dentes de alho picados até dourar. Acrescente a cebola picada, os pimentões verde e amarelo e refogue.",
+                    "Adicione as cenouras raladas, ajuste o sal, acrescente páprica defumada, salsinha, cebolinha, 4 colheres de sopa de creme de leite e 50 g de muçarela ralada. Misture bem e desligue.",
+                    "Abra cada filé com um martelo culinário, coloque parte do recheio no centro e enrole, formando os frangos recheados.",
+                    "Disponha os frangos em uma forma untada com azeite, cubra com papel alumínio e leve ao forno preaquecido a 200°C por 35 minutos.",
+                    "Enquanto isso, misture o recheio que sobrou com mais 4 colheres de sopa de creme de leite e 50 g de muçarela ralada.",
+                    "Retire o papel alumínio, coloque essa mistura por cima dos frangos e volte ao forno por mais 15 minutos. Sirva em seguida."
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 36,
+                name: "CACHORRO QUENTE NO PALITO",
+                time: 40,
+                servings: 4,
+                level: "SALGADOS E LANCHES",
+                tags: ["hot dog", "petisco", "receitas simples", "receita salgada", " "],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/622f216aaa1eba73658541c5/fotos/9eed282b-e6cb-4149-881e-794abb2e5f9e-xl.webp",
+                imageAlt: "cachorro quente no palito",
+                ingredients: [
+                    "Pão de forma a gosto",
+                    "2 unidades de ovos",
+                    "Muçarela a gosto",
+                    "Salsicha a gosto",
+                    "Farinha panko a gosto",
+                    "Óleo a gosto"
+                    
+                ],
+                instructions: [
+                    "Com o auxílio de um rolo amasse o pão de forma. Em seguida, passe os ovos batidos nas laterais.",
+                    "Depois adicione a muçarela, a salsicha, enrole bem e feche as laterais.",
+                    "Para empanar, passe nos ovos batidos e na farinha panko. Repita esse processo duas vezes, empanando muito bem.",
+                    "Em uma panela com óleo quente, frite até dourar dos dois lados."
+                    
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 37,
+                name: "PÃO COM LINGUIÇA",
+                time: 60,
+                servings: 10,
+                level: "SALGADOS E LANCHES",
+                tags: ["linguiça", "pão", "lanche", "receuta simples", " "],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/6127963937229f3faf062b8f/fotos/b50c1dbd-78a6-4804-986c-c8e95b2cbb1a-xl.webp",
+                imageAlt: "pão com linguiça",
+                ingredients: [
+                    "1 quilo de linguiça",
+                    "1/2 unidade de cebola",
+                    "1 colher de sopa de azeite",
+                    "100 gramas de queijo parmesão ralado",
+                    "300 gramas de requeijão",
+                    "10 unidades de pão francês",
+                    "150 gramas de muçarela ralada",
+                    "Orégano a gosto"
+                    
+                ],
+                instructions: [
+                    "Em um refratário, debulhe a linguiça e com as mãos misture. Acrescente a cebola picada e o azeite. Misture tudo muito bem.",
+                    "Em uma frigideira, adicione a linguiça e deixe fritar.",
+                    "Agora transfira a linguiça para um recipiente. Depois acrescente o parmesão ralado, o requeijão e misture. ",
+                    "Corte o meio dos pães e depois retire a parte de cima. Com o auxílio de uma colher, amasse as laterais e o fundo. Se preferir, você pode amassar com as mãos.",
+                    "Agora adicione um pouco da linguiça dentro do pão. Repita esse processo até acabar todos os ingredientes.",
+                    "Coloque os pães em um refratário, depois acrescente a muçarela ralada por cima. Por fim, adicione o orégano. Leve ao forno pré-aquecido a 180°C por 15 minutos."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 38,
+                name: "PÃO DE ALHO",
+                time: 120,
+                servings: 8,
+                level: "MASSAS SALGADAS",
+                tags: ["pão caseiro", "alho", "pão de alho", "receita simples", " "],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/66392f2afb6a0a55f7793634/fotos/96f07759-c327-4638-9e69-8b40337262a9-xl.webp",
+                imageAlt: "pão de alho",
+                ingredients: [
+                    "3 xícaras de farinha de trigo",
+                    "2 colheres de sopa de açúcar",
+                    "1 colher de café de sal",
+                    "10 gramas de fermento biológico seco",
+                    "1 unidade de ovo",
+                    "6 colheres de sopa de margarina",
+                    "200 mililitros de leite",
+                    "3 unidades de dente de alho",
+                    "Salsinha e cebolinha a gosto",
+                    "Sal a gosto",
+                    "Muçarela ralada a gosto",
+                    "1 unidade de gema de ovo",
+                    
+                ],
+                instructions: [
+                    "Em um recipiente, adicione a farinha de trigo, o açúcar, 1 colher de café de sal, o fermento biológico seco e misture bem.",
+                    "Em seguida, acrescente o ovo, 3 colheres de sopa de margarina, o leite aos poucos e misture novamente.",
+                    "Com as mãos, misture muito bem e depois, sove a massa por aproximadamente 10 minutos.",
+                    "Divida a massa em 15 partes iguais e boleie.",
+                    "Em um recipiente, adicione 3 colheres de sopa de margarina, o alho ralado, a salsinha e cebolinha, o sal a gosto e misture.",
+                    "Agora, abra a massa, adicione um pouco dessa mistura e a muçarela ralada.",
+                    "Repita esse processo e depois, coloque uma massa sobre a outra.",
+                    "Transfira para uma forma untada e enfarinhada, cubra com um pano e deixe descansar por 40 minutos.",
+                    "Pincele a gema de ovo por cima e finalize com a salsinha e cebolinha.",
+                    "Leve ao forno preaquecido a 180 graus por aproximadamente 35 minutos."
+                    
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 39,
+                name: "PUDIM DE LARANJA",
+                time: 260,
+                servings: 6,
+                level: "SOBREMESA",
+                tags: ["pudim", "laranja", "sobremesa", "doce", " "],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/67d2c8de9747704b428f06fb/fotos/059bfdbe-5423-4d03-bbd7-39c0a6e003a3-xl.webp",
+                imageAlt: "pudim de laranja",
+                ingredients: [
+                    "4 unidades de laranja",
+                    "200 mililitros de leite",
+                    "200 gramas de creme de leite",
+                    "395 gramas de leite condensado",
+                    "24 gramas de gelatina incolor",
+                    "1 xícara de açúcar",
+                    "1/2 xícara de suco de laranja"
+                    
+                    
+                ],
+                instructions: [
+                    "No liquidificador, adicione as laranjas descascadas, o leite, o creme de leite, o leite condensado, a gelatina incolor, hidratada conforme as instruções da embalagem e bata tudo muito bem.",
+                    "Em uma panela, adicione o açúcar e deixe derreter.",
+                    "Em seguida, acrescente o suco de laranja aos poucos e misture bem.",
+                    "Despeje em uma forma e depois, acrescente a mistura que fizemos anteriormente.",
+                    "Leve para a geladeira por 4 horas."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 40,
+                name: "PAVÊ TRADICIONAL",
+                time: 240,
+                servings: 8,
+                level: "SOBREMESA",
+                tags: ["pavê", "sobremesa", "chocolate", "receita de natal", " "],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/6569b62c761155fbb8bb3b9b/fotos/11e2492e-038a-4a57-9b29-8417117f14fc-xl.webp",
+                imageAlt: "pavê tradicional",
+                ingredients: [
+                    "395 gramas de leite condensado",
+                    "200 gramas de creme de leite",
+                    "2 colheres de sopa de amido de milho",
+                    "500 mililitros de leite",
+                    "2 unidades de gemas de ovo",
+                    "1 colher de sopa de essência de baunilha",
+                    "150 gramas de biscoito champagne",
+                    "100 gramas de chocolate meio amargo",
+                    "200 gramas de creme de leite",
+                    "Raspas de chocolate a gosto"
+                    
+                    
+                ],
+                instructions: [
+                    "Em uma panela, adicione o leite condensado, 200g de creme de leite, o amido de milho e misture bem.",
+                    "Em seguida, acrescente o leite, as gemas de ovo peneiradas, a essência de baunilha e mexa até engrossar.",
+                    "Em uma travessa, adicione um pouco do creme e espalhe.",
+                    "Depois, adicione o biscoito champagne.",
+                    "Repita esse processo até acabar os ingredientes.",
+                    "Finalize com o creme branco, espalhe bem e depois, leve para a geladeira por 2 horas.",
+                    "Em um recipiente, adicione o chocolate meio amargo derretido, 200g de creme de leite e misture bem.",
+                    "Despeje sobre o creme, espalhe e leve para a geladeira por mais 1 hora.",
+                    "Finalize com as raspas de chocolate."
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 41,
+                name: "COUVE-FLOR EMPANADA",
+                time: 60,
+                servings: 3,
+                level: "FRITOS",
+                tags: ["couve flor", "petisco", "receita facil", " ", " "],
+                image: "https://dqcd2ry9j125c.cloudfront.net/receita/611f937ac9070f4c8e6c8af8/fotos/4cfabe2b-cd31-48fb-84e5-af7460101396-xl.webp",
+                imageAlt: "couve-flor empanada",
+                ingredients: [
+                    "Couve-flor a gosto",
+                    "Água a gosto",
+                    "1/4 xícara de vinagre branco",
+                    "2 unidades de dentes de alho",
+                    "1 xícara de farinha de trigo",
+                    "2 colheres de chá de alho em pó",
+                    "2 colheres de chá de páprica doce",
+                    "1 colher de chá de salsa desidratada",
+                    "2 colheres de chá de sal",
+                    "1 colher de café de pimenta-do-reino",
+                    "2 unidades de ovos",
+                    "1/2 xícara de leite",
+                    "Farinha de trigo a gosto",
+                    "Farinha panko a gosto"
+                    
+                ],
+                instructions: [
+                    "Com uma faca, retire os talos e desmanche a couve-flor. Em um recipiente, adicione a couve-flor, um pouco de água e vinagre branco. Deixe de molho por aproximadamente 10 minutos. Logo após esse processo, lave a couve-flor com água corrente.",
+                    "Em uma panela com água fervendo, adicione os dentes de alho e a couve-flor. Deixe cozinhar por 5 minutos. O alho serve para dar um sabor a mais para a couve-flor.",
+                    "Em um prato fundo, adicione a farinha de trigo, o alho em pó, a páprica doce, a salsa desidratada, o sal e a pimenta-do-reino. Misture muito bem.",
+                    "Agora, em um refratário, adicione os ovos e o leite. Misture bem.",
+                    "Passe a couve-flor na farinha de trigo. Lembrando que a couve-flor precisa estar fria e seca para poder empanar. Depois, passe nos ovos. Por fim, passe na farinha panko. Repita esse processo até acabar os ingredientes.",
+                    "Em uma panela com óleo quente, adicione as couve-flor empanadas aos poucos e deixe fritar por aproximadamente 3 a 4 minutos."
+                    
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 30,
+                name: "",
+                time: 90,
+                servings: 3,
+                level: "ASSADOS",
+                tags: ["", "", "", " ", " "],
+                image: "",
+                imageAlt: "",
+                ingredients: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                instructions: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 30,
+                name: "",
+                time: 90,
+                servings: 3,
+                level: "ASSADOS",
+                tags: ["", "", "", " ", " "],
+                image: "",
+                imageAlt: "",
+                ingredients: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                instructions: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 30,
+                name: "",
+                time: 90,
+                servings: 3,
+                level: "ASSADOS",
+                tags: ["", "", "", " ", " "],
+                image: "",
+                imageAlt: "",
+                ingredients: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                instructions: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 30,
+                name: "",
+                time: 90,
+                servings: 3,
+                level: "ASSADOS",
+                tags: ["", "", "", " ", " "],
+                image: "",
+                imageAlt: "",
+                ingredients: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                instructions: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                id: 30,
+                name: "",
+                time: 90,
+                servings: 3,
+                level: "ASSADOS",
+                tags: ["", "", "", " ", " "],
+                image: "",
+                imageAlt: "",
+                ingredients: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                instructions: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    
+                ],
+                tips: [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+
+
+
+
+
+
+
+
+
+
+
+            
+        ];
+
+        /* ===========================
+           LocalStorage - carregar e salvar
+           =========================== */
+        function loadUserRecipes() {
+            const userRecipes = localStorage.getItem('userRecipes');
+            if (userRecipes) {
+                const parsed = JSON.parse(userRecipes);
+                // Evita duplicar receitas ao recarregar
+                parsed.forEach(recipe => {
+                    if (!recipes.find(r => r.id === recipe.id)) {
+                        recipes.push(recipe);
+                    }
+                });
+            }
+        }
+
+        function saveUserRecipes() {
+            // Convenção: receitas criadas pelo usuário têm ID > 1000
+            const userRecipes = recipes.filter(r => r.id > 1000);
+            localStorage.setItem('userRecipes', JSON.stringify(userRecipes));
+        }
+
+        function loadFavorites() {
+            const favorites = localStorage.getItem('favorites');
+            return favorites ? JSON.parse(favorites) : [];
+        }
+
+        function saveFavorites(favorites) {
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        function getNextUserId() {
+            const userRecipes = recipes.filter(r => r.id > 1000);
+            return userRecipes.length > 0 ? Math.max(...userRecipes.map(r => r.id)) + 1 : 1001;
+        }
+
+        /* ===========================
+           Renderização das receitas (cards)
+           =========================== */
+        function renderRecipes(recipesToRender = recipes, containerId = 'recipesGrid') {
+            const container = document.getElementById(containerId);
+            const favorites = loadFavorites();
+
+            if (!container) return;
+
+            if (recipesToRender.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhuma receita encontrada</h3>
+                        <p>Tente buscar por outros termos ou filtros</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = recipesToRender.map(recipe => `
+                <div class="recipe-card" onclick="openRecipeModal(${recipe.id})">
+                    <div class="recipe-image">
+                        <img src="${recipe.image}" alt="${recipe.imageAlt || recipe.name}" />
+                        <div class="recipe-level level-${recipe.level}">${recipe.level}</div>
+                        <button class="favorite-btn ${favorites.includes(recipe.id) ? 'favorited' : ''}" 
+                                onclick="event.stopPropagation(); toggleFavorite(${recipe.id})" aria-label="Favoritar">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">${recipe.name}</h3>
+                        <div class="recipe-meta">
+                            <span><i class="fas fa-clock"></i> ${recipe.time} min</span>
+                            <span><i class="fas fa-users"></i> ${recipe.servings} porções</span>
+                        </div>
+                        <div class="recipe-tags">
+                            ${recipe.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* ===========================
+           Filtro + busca
+           =========================== */
+        function filterRecipes(searchTerm = '', levelFilter = 'all', containerId = 'recipesGrid') {
+            let filtered = recipes;
+
+            if (levelFilter !== 'all') {
+                filtered = filtered.filter(r => r.level === levelFilter);
+            }
+
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filtered = filtered.filter(r =>
+                    r.name.toLowerCase().includes(term) ||
+                    r.tags.some(tag => tag.toLowerCase().includes(term)) ||
+                    r.ingredients.some(ing => ing.toLowerCase().includes(term))
+                );
+            }
+
+            renderRecipes(filtered, containerId);
+        }
+
+        /* ===========================
+           Favoritos
+           =========================== */
+        function toggleFavorite(recipeId) {
+            const favorites = loadFavorites();
+            const index = favorites.indexOf(recipeId);
+
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast('Receita removida dos favoritos', 'error');
+            } else {
+                favorites.push(recipeId);
+                showToast('Receita adicionada aos favoritos');
+            }
+
+            saveFavorites(favorites);
+
+            // Atualiza o ícone de coração em todos os cards
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                const id = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
+                btn.classList.toggle('favorited', favorites.includes(id));
+            });
+
+            // Se a seção de favoritos estiver visível, re-renderiza
+            const favSection = document.getElementById('favorites');
+            if (favSection && !favSection.classList.contains('hidden')) {
+                renderFavorites();
+            }
+        }
+
+        function renderFavorites() {
+            const favorites = loadFavorites();
+            const favoriteRecipes = recipes.filter(r => favorites.includes(r.id));
+            renderRecipes(favoriteRecipes, 'favoritesGrid');
+        }
+
+        /* ===========================
+           Modal de receita
+           =========================== */
+        function openRecipeModal(recipeId) {
+            const recipe = recipes.find(r => r.id === recipeId);
+            if (!recipe) return;
+
+            document.getElementById('modalRecipeTitle').textContent = recipe.name;
+            document.getElementById('modalRecipeMeta').innerHTML = `
+                <span><i class="fas fa-clock"></i> ${recipe.time} min</span>
+                <span><i class="fas fa-users"></i> ${recipe.servings} porções</span>
+                <span class="recipe-level level-${recipe.level}">${recipe.level}</span>
+            `;
+
+            const modalImage = document.getElementById('modalRecipeImage');
+            modalImage.src = recipe.image;
+            modalImage.alt = recipe.imageAlt || recipe.name;
+
+            // Ajusta porções iniciais
+            document.getElementById('portionCalculator').value = recipe.servings;
+
+            renderIngredients(recipe.ingredients, recipe.servings);
+
+            // Passo a passo
+            document.getElementById('modalInstructionsList').innerHTML =
+                recipe.instructions.map(step => `<li>${step}</li>`).join('');
+
+            // Dicas (se existirem)
+            if (recipe.tips && recipe.tips.length > 0) {
+                document.getElementById('modalTipsSection').style.display = 'block';
+                document.getElementById('modalTipsList').innerHTML =
+                    recipe.tips.map(t => `<li>${t}</li>`).join('');
+            } else {
+                document.getElementById('modalTipsSection').style.display = 'none';
+            }
+
+            document.getElementById('recipeModal').style.display = 'block';
+            window.currentRecipe = recipe; // guarda receita atual para a calculadora
+        }
+
+        function closeModal() {
+            document.getElementById('recipeModal').style.display = 'none';
+        }
+
+        /* ===========================
+           Ingredientes + calculadora
+           =========================== */
+        function renderIngredients(ingredients, servings) {
+            const list = document.getElementById('modalIngredientsList');
+            list.innerHTML = ingredients.map(ingredient => {
+                // Pega a primeira "palavra" como quantidade
+                const [amount, ...rest] = ingredient.split(' ');
+                const ingredientName = rest.join(' ');
+                return `
+                    <li>
+                        <span>${ingredientName}</span>
+                        <span class="ingredient-amount" data-original="${amount}">${amount}</span>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function calculateIngredients() {
+            if (!window.currentRecipe) return;
+
+            const newServings = parseInt(document.getElementById('portionCalculator').value);
+            const originalServings = window.currentRecipe.servings;
+            const ratio = newServings / originalServings;
+
+            document.querySelectorAll('.ingredient-amount').forEach(el => {
+                const original = el.getAttribute('data-original');
+                const calculated = calculateAmount(original, ratio);
+                el.textContent = calculated;
+            });
+
+            showToast(`Ingredientes calculados para ${newServings} porções`);
+        }
+
+        function resetCalculator() {
+            if (!window.currentRecipe) return;
+
+            document.getElementById('portionCalculator').value = window.currentRecipe.servings;
+
+            document.querySelectorAll('.ingredient-amount').forEach(el => {
+                const original = el.getAttribute('data-original');
+                el.textContent = original;
+            });
+
+            showToast('Calculadora resetada');
+        }
+
+        // Converte quantidades (número ou fração) aplicando o novo fator
+        function calculateAmount(original, ratio) {
+            // Frações simples (ex.: 1/2, 1/4, 3/4)
+            if (original.includes('/')) {
+                const [numerator, denominator] = original.split('/').map(Number);
+                const decimal = numerator / denominator;
+                const result = decimal * ratio;
+
+                if (result === 0.5) return '1/2';
+                if (result === 0.25) return '1/4';
+                if (result === 0.75) return '3/4';
+                if (result === 1) return '1';
+
+                return result.toFixed(1).replace('.0', '');
+            }
+
+            // Números comuns
+            const number = parseFloat(original);
+            if (!isNaN(number)) {
+                const result = number * ratio;
+                return result.toFixed(1).replace('.0', '');
+            }
+
+            // Se não for número, mantém original
+            return original;
+        }
+
+        /* ===========================
+           Criação de nova receita
+           =========================== */
+        function addRecipe(formData) {
+            const newRecipe = {
+                id: getNextUserId(),
+                name: formData.name,
+                time: parseInt(formData.time),
+                servings: parseInt(formData.servings),
+                level: formData.level,
+                tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
+                image: 'https://placehold.co/400x300',
+                imageAlt: `Receita ${formData.name} criada pelo usuário`,
+                ingredients: formData.ingredients.split('\n').filter(s => s.trim()),
+                instructions: formData.instructions.split('\n').filter(s => s.trim()),
+                tips: formData.tips ? formData.tips.split('\n').filter(s => s.trim()) : []
+            };
+
+            recipes.push(newRecipe);
+            saveUserRecipes();
+            showToast('Receita adicionada com sucesso!');
+            document.getElementById('addRecipeForm').reset();
+            renderRecipes();
+        }
+
+        /* ===========================
+           Toast (avisos)
+           =========================== */
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        /* ===========================
+           Navegação entre seções (SPA simples)
+           =========================== */
+        function showSection(sectionId) {
+            // Esconde todas
+            document.querySelectorAll('.section').forEach(sec => sec.classList.add('hidden'));
+
+            // Mostra a escolhida
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            // Atualiza destaque no menu
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            const link = document.querySelector(`[data-section="${sectionId}"]`);
+            if (link) link.classList.add('active');
+
+            // Carregamentos específicos
+            if (sectionId === 'favorites') {
+                renderFavorites();
+            } else if (sectionId === 'recipes') {
+                renderRecipes(recipes, 'recipesGridPage');
+            }
+        }
+
+        /* ===========================
+           Eventos (inicialização)
+           =========================== */
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserRecipes();  // carrega receitas do usuário (localStorage)
+            renderRecipes();    // render inicial (home)
+
+            // Navegação por cliques no menu
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showSection(this.getAttribute('data-section'));
+                });
+            });
+
+            // Menu mobile
+            document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+                document.getElementById('navLinks').classList.toggle('active');
+            });
+
+            // Busca nos dois campos (home e receitas)
+            ['searchInput', 'searchInputRecipes'].forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (!input) return;
+
+                const containerId = inputId === 'searchInput' ? 'recipesGrid' : 'recipesGridPage';
+                input.addEventListener('input', function() {
+                    const activeFilter = this.closest('.search-container')
+                        .querySelector('.filter-btn.active')
+                        .getAttribute('data-filter');
+                    filterRecipes(this.value, activeFilter, containerId);
+                });
+            });
+
+            // Filtros (todos os botões com .filter-btn)
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('filter-btn')) {
+                    const container = e.target.closest('.search-container');
+                    const searchInput = container.querySelector('input');
+                    const containerId = searchInput.id === 'searchInput' ? 'recipesGrid' : 'recipesGridPage';
+
+                    // Marca o filtro ativo
+                    container.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    // Aplica filtro + termo atual
+                    filterRecipes(searchInput.value, e.target.getAttribute('data-filter'), containerId);
+                }
+            });
+
+            // Envio do formulário "Adicionar Receita"
+            document.getElementById('addRecipeForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = {
+                    name: document.getElementById('recipeName').value,
+                    time: document.getElementById('recipeTime').value,
+                    servings: document.getElementById('recipeServings').value,
+                    level: document.getElementById('recipeLevel').value,
+                    tags: document.getElementById('recipeTags').value,
+                    ingredients: document.getElementById('recipeIngredients').value,
+                    instructions: document.getElementById('recipeInstructions').value,
+                    tips: document.getElementById('recipeTips').value
+                };
+                addRecipe(formData);
+            });
+
+            // Fecha modal clicando fora
+            document.getElementById('recipeModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+
+            // Fecha modal com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModal();
+            });
+        });
+    </script>
+</body>
+</html>
